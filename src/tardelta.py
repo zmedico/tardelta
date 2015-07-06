@@ -3,8 +3,10 @@ import argparse
 import collections
 import hashlib
 import logging
+import os
 import shlex
 import subprocess
+import sys
 import tarfile
 
 
@@ -206,8 +208,10 @@ def main():
     if compressor_proc is not None:
         # Close stdin first, so the compressor reaches EOF and exits.
         compressor_proc.stdin.close()
-        compressor_proc.wait()
-
+        if compressor_proc.wait() != os.EX_OK:
+            logging.fatal("compressor command failed with return code {}: {}".format(
+                compressor_proc.returncode, args.compressor))
+            return 1
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
