@@ -24,6 +24,10 @@ TAR_FORMATS = collections.OrderedDict((
     ('ustar', tarfile. USTAR_FORMAT),
 ))
 
+DIGEST_EXCLUDE = frozenset([
+    'atime',
+    'ctime',
+])
 
 def delta(base_tarfile, deriv_tarfile, delta_tarfile, scratch_db=None):
     """create a delta tar file from base and derived tar files
@@ -91,6 +95,8 @@ def _digest_tarinfo(tarinfo):
     m = hashlib.md5()
     for d in (tarinfo.get_info(), tarinfo.pax_headers):
         for k in sorted(d):
+            if k in DIGEST_EXCLUDE:
+                continue
             m.update(_encode_str(k))
             v = d[k]
             try:
