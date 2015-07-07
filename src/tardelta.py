@@ -64,6 +64,13 @@ def delta(base_tarfile, deriv_tarfile, delta_tarfile, scratch_db=None):
         fileobj = None
         if tarinfo.isreg():
             fileobj = deriv_tarfile.extractfile(tarinfo)
+
+            # tarfile (Python 3.4.3) writes corrupt sparse entries, so convert them to regular entries
+            if tarinfo.pax_headers.get("GNU.sparse.major") == "1" and tarinfo.pax_headers.get("GNU.sparse.minor") == "0":
+                for k in list(tarinfo.pax_headers):
+                    if k.startswith("GNU.sparse."):
+                        del tarinfo.pax_headers[k]
+
         delta_tarfile.addfile(tarinfo, fileobj=fileobj)
 
     logging.info("number of derived entries: {}".format(deriv_count))
@@ -95,6 +102,8 @@ def _digest_tarinfo(tarinfo):
     m = hashlib.md5()
     for d in (tarinfo.get_info(), tarinfo.pax_headers):
         for k in sorted(d):
+            if k.startswith("GNU.sparse."):
+                continue
             if k in DIGEST_EXCLUDE:
                 continue
             m.update(_encode_str(k))
