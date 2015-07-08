@@ -7,8 +7,8 @@ sys.path.insert(0, "src")
 from tardelta import (
     __author__,
     __email__,
-	__project__,
-	__version__,
+    __project__,
+    __version__,
 )
 sys.path.remove("src")
 
