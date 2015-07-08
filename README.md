@@ -11,7 +11,7 @@ delta tarball can then be layered on top of the base image using a Dockerfile
 like the following:
 ```
 FROM base
-ADD delta.tar.xz
+ADD delta.tar.xz /
 ```
 Many different types of containers can thus be derived from a common base
 image, while sharing a single copy of the base image. This saves disk space,
