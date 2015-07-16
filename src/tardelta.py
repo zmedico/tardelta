@@ -12,6 +12,7 @@ import tarfile
 
 __version__ = "HEAD"
 __project__ = "tardelta"
+__description__ = "Generate a tarball of differences between two tarballs"
 __author__ = "Zac Medico"
 __email__ = "<zmedico@gmail.com>"
 __copyright__ = "Copyright 2015 Zac Medico"
@@ -126,8 +127,8 @@ def main():
 
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="  {} {}\n{}".format(__project__, __version__,
-        "  Generate a tarball of differences between two tarballs"))
+        description="  {} {}\n  {}".format(
+        __project__, __version__, __description__))
 
     parser.add_argument(
         'base_tarfile',
